@@ -5,11 +5,10 @@ import websockets
 
 pygame.init()
 
-# Set up the display
 window_size = (640, 480)
 screen = pygame.display.set_mode(window_size)
 
-heading = 0  # Initialize heading variable
+heading = 0
 
 async def receive_heading():
     global heading
@@ -35,21 +34,19 @@ def draw_compass(screen, heading):
 async def main():
     global heading
 
-    # Start receiving heading in the background
     asyncio.create_task(receive_heading())
 
     while True:
-        screen.fill((255, 255, 255))  # Clear the screen
+        screen.fill((255, 255, 255))
 
-        draw_compass(screen, heading)  # Draw the compass with the updated heading
+        draw_compass(screen, heading)
 
         pygame.display.flip()
 
         if pygame.key.get_pressed()[pygame.K_q]:
             break
 
-        await asyncio.sleep(0.01)  # To prevent the loop from consuming too much CPU
-
+        await asyncio.sleep(0.01)
     pygame.quit()
 
 asyncio.run(main())
