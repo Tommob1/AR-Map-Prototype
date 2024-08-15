@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iPhone Compass WebSocket</title>
+    <script>
+        let socket;
+
+        function connectWebSocket() {
+            socket = new WebSocket("ws://172.20.10.10:8765");
+
+            socket.onopen = function(event) {
+                console.log("WebSocket is open now.");
+            };
+
+            socket.onclose = function(event) {
+                console.log("WebSocket is closed now.");
+            };
+
+            socket.onerror = function(event) {
+                console.error("WebSocket error observed:", event);
+            };
+        }
+
+        function handleOrientation(event) {
+            let alpha = event.alpha; // Alpha represents the compass heading in degrees (0 to 360)
+            if (socket && socket.readyState === WebSocket.OPEN) {
+                socket.send("Heading: " + alpha);
+            }
+        }
+
+        window.addEventListener("deviceorientation", handleOrientation, true);
+
+        window.onload = function() {
+            connectWebSocket();
+        };
+    </script>
+</head>
+<body>
+    <h1>iPhone Compass Data Sender</h1>
+    <p>This page sends your iPhone's compass data to a WebSocket server.</p>
+</body>
+</html>
